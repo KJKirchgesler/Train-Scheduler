@@ -54,6 +54,63 @@ $("#add-train").on("click", function(event) {
   console.log(newTrain.start);
   console.log(newTrain.frequency);
 
+  // Alert
+  alert("Train successfully added");
+
+  // Clears all of the text-boxes
+  $("#train-name").val("");
+  $("#destination").val("");
+  $("#first-time").val("");
+  $("#frequency-min").val("");
+
+  });
+
+// 3. Create Firebase event for adding train to the database and 
+	//a row in the table when a user adds an entry
+database.ref().on("child_added", function(childSnapshot, prevChildKey) {
+
+  console.log(childSnapshot.val());
+
+// Store everything into a variable.
+  var trainName = childSnapshot.val().name;
+  var destination = childSnapshot.val().destination;
+  var firstTime = childSnapshot.val().start;
+  var frequencyMin = childSnapshot.val().frequency;
+
+   // console log train data to make sure variable works
+  console.log(trainName);
+  console.log(destination);
+  console.log(firstTime);
+  console.log(frequencyMin);
+
+
+  // First Train Time  - set back 1 year to ensure it comes before current time
+    var firstTimeReset = moment(firstTime, "HH:mm").subtract(1, "years");
+    console.log(firstTimeReset);
+
+    // Current Time
+    var rightNow = moment();
+    console.log("The time now is: " + moment(rightNow).format("hh:mm"));
+
+    // Establishing difference between the reset time and now
+    var timeDifference = moment().diff(moment(firstTimeReset), "minutes");
+    console.log("The difference is: " + timeDifference);
+
+    // Time apart (remainder)
+    var timeRemainder = timeDifference % frequencyMin;
+    console.log(timeRemainder);
+
+    // Minutes until next train arrives
+    var minutesNextTrain = frequencyMin - timeRemainder;
+    console.log("Minutes until next train: " + minutesNextTrain);
+
+    // Next train arrives
+    var nextTrain = moment().add(minutesNextTrain, "minutes");
+    console.log("Next train arrival time: " + moment(nextTrain).format("hh:mm"));
+
+
+
+
   });
 
 
