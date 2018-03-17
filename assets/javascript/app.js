@@ -101,14 +101,31 @@ database.ref().on("child_added", function(childSnapshot, prevChildKey) {
     console.log(timeRemainder);
 
     // Minutes until next train arrives
-    var minutesNextTrain = frequencyMin - timeRemainder;
-    console.log("Minutes until next train: " + minutesNextTrain);
+    var minutesAway = frequencyMin - timeRemainder;
+    console.log("Minutes until next train: " + minutesAway);
 
     // Next train arrives
-    var nextTrain = moment().add(minutesNextTrain, "minutes");
+    var nextTrain = moment().add(minutesAway, "minutes");
     console.log("Next train arrival time: " + moment(nextTrain).format("hh:mm"));
 
+	//Adding data to the table
+  
+      var tBody = $("tbody");
+      var tRow = $("<tr>");
 
+      //Populating table data <td> with our data
+      var trainNameTd = $("<td>").text(trainName);
+      var destinationTd = $("<td>").text(destination);
+      var frequencyTd = $("<td>").text(frequencyMin);
+      var nextTrainTd = $("<td>").text(nextTrain);
+      var minutesAwayTd = $("<td>").text(minutesAway);
+      
+      // Append the newly created table data to the table row
+      tRow.append(trainNameTd, destinationTd, frequencyTd, nextTrainTd, minutesAwayTd);
+      
+      // Append the table row to the table body
+      tBody.append(tRow);
+    
 
 
   });
